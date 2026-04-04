@@ -1,0 +1,84 @@
+02. Types and Values
+
+The current compiler recognizes primitive builtin kinds, class-like user types, arrays, maps, type queries, pointers, and lowered compiler-only types. In practice, Dash code falls into three broad type families: primitive scalar values, addressable machine-oriented storage, and logical user-defined aggregates.
+
+Primitive builtin types
+
+- void — no value / no returned payload
+- bool — boolean logical value
+- int — default signed integer lane in user code
+- long — wider signed integer lane
+- uint — unsigned / universal integer style lane in user code
+- float and double — floating-point lanes
+- char — byte-sized character / small integer lane
+- string — string pointer style type in the current implementation
+
+Mutability and declaration forms
+
+
+let a: int = 10;
+const b: int = 20;
+let inferred := a + b;
+let text: string = $"sum = {inferred}";
+
+
+Current declaration forms include explicit typing and initializer-based inference. The parser accepts let x := expr; because it recognizes a : immediately followed by = as an inferred declaration form. Use explicit types when you want ABI clarity, overload clarity, or stable codegen expectations. Use inferred declarations when the value already makes the type obvious.
+
+Pointers
+
+
+let value: int = 42;
+let ptr: int* = &value;
+*ptr = 100;
+io.println(value);
+
+
+Unary & takes addresses of variables and fields. Unary * dereferences pointers and also treats strings as character-addressable storage during semantic lowering. Pointer arithmetic is supported in the analyzer/codegen path for pointer-plus-integer, integer-plus-pointer, and pointer-minus-pointer where types are compatible.
+
+Arrays
+
+
+const names: string[3] = {"Anna", "Joe", "Mary"};
+let numbers: int[] = {1, 2, 3, 4};
+io.println(names[0]);
+io.println(numbers[2]);
+
+
+Arrays are first-class indexed storage. The current compiler still implements array builtins such as ::push, ::insert, ::set, ::rem, and ::pop, but for user-facing collection design this package recommends treating fixed arrays as raw indexed storage and Vec<T> as the standard dynamic growth container.
+
+Maps
+
+
+let ages: @map<string, int>;
+ages["anna"] = 22;
+ages["joe"] = 30;
+io.println(ages["anna"]);
+
+
+
+let table: @map<string, int> = {["alpha": 1], ["beta": 2]};
+table["gamma"] = 3;
+io.println(table["beta"]);
+
+
+The map type is written as @map<K, V>. The parser accepts map literals with entry syntax [key: value] or [key, value] inside braces. The analyzer also supports map arithmetic forms where map + [key: value] inserts/replaces and map - [key] removes, but those operators are better viewed as advanced low-level conveniences than as the main style you should teach first.
+
+Casts and lowered compiler-only types
+
+
+let x: int = 10;
+let y: double = double<x>;
+let raw: @![i32];
+let bits: @![u64];
+
+
+The parser reserves @![type] for lowered/internal compiler type spelling. This is not a user annotation. The currently recognized lowered names include aliases like i1, i8, u8, i16, i32, i64, u16, u32, u64, f32, f64, and undef. Cast expressions use Type<expr> and are validated semantically; they are not textual rewrites.
+
+Type queries
+
+
+let alias: #type(MyVector.new());
+let raw: #type(math::Point);
+
+
+#type(...) is only valid in type positions. The analyzer rejects it in ordinary expression positions. This makes it a type query mechanism, not a runtime reflection mechanism.

@@ -1,0 +1,96 @@
+# 07. Annotations and Compiler Builtins
+
+User-facing annotations and compiler-reserved lowered type notation both start with `@`, so documentation must be extremely precise here. User annotations are metadata and compile-time control. `@![type]` is compiler-only lowered type spelling. They are not interchangeable.
+
+## Global-function-only annotations
+
+```dash
+@Deprecated
+fn old_api(): void {}
+
+@Warning("api-warning", "experimental CLI entry")
+fn risky_cli(): void {}
+
+@entry
+fn start(): int {
+    risky_cli();
+    return 0;
+}
+```
+
+The parser validates `@inline`, `@entry`, and `@link(...)` specially. `@inline` and `@entry` accept no arguments. `@link(...)` requires exactly one string argument such as `@link("gtk4")`. These three annotations are rejected on local functions, class methods, and struct methods.
+
+## Function and declaration warnings
+
+```dash
+@Deprecated
+fn old_api(): void {}
+
+@Risky
+fn unstable(): void {}
+
+@Warning("dangerous default path")
+fn maybe_bad(): void {}
+
+@Warning("api-warning", "warn only when -Wapi-warning is enabled")
+fn gated(): void {}
+```
+
+The semantic analyzer emits use-site warnings for `@Deprecated`, `@Risky`, `@Experimental`, `@Unsafe`, and `@Warning(...)`. It also emits declaration-site notes/warnings for metadata annotations like `@Todo`, `@Review`, `@Audit`, `@Notice`, and `@Trace`. This is a strong sign that annotations are meant to participate in your tooling story, not just in codegen.
+
+## @Safe and stripping
+
+```dash
+@Safe
+fn assert_positive(x: int): void {
+    if (x < 0) {
+        io.error("negative value");
+    }
+}
+```
+
+`@Safe` is special because the CLI has `-O`, which in the current compiler strips `@Safe` methods and direct calls deemed removable by the analyzer pass. That makes `@Safe` a language-level hook into an optimization/safety split rather than a mere label.
+
+## @Index[field]
+
+```dash
+@Index[buffer]
+struct Ring<T> {
+    let buffer: T*;
+    let size: int;
+}
+```
+
+`@Index[field]` is currently supported on `struct` declarations. The chosen field must exist and must be an array, pointer, or map for indexing behavior to make sense semantically. This annotation is central to the design of `Vec<T>` and any future user-defined indexed containers.
+
+## Builtin data and metaprogramming forms
+
+```dash
+#sizeof(int)
+#sizeof(buffer)
+#type(MyType)
+env<"target", "linux">
+is<int, value>
+exdt<ptr>
+```
+
+The parser currently gives special treatment to `#sizeof(...)`, `#type(...)`, `env<...>`, `is<...>`, and `exdt<...>`. `#sizeof` accepts either a type or an expression. `#type` is restricted to type positions. `env<"target", "linux">` is resolved at compile time by parser/analyzer logic. `is<T, x>` is a type test and also extends into variadic slots. `exdt<...>` extracts raw payload-like numeric data from strings, pointers, arrays, classes, and variadic values.
+
+## Lowered compiler-only types
+
+```dash
+@![i1]
+@![i8]
+@![u8]
+@![i16]
+@![i32]
+@![i64]
+@![u16]
+@![u32]
+@![u64]
+@![f32]
+@![f64]
+@![undef]
+```
+
+Use this notation only when you intentionally want compiler-lowered spelling. For ordinary user code, prefer the logical names `bool`, `char`, `int`, `long`, `uint`, `float`, and `double`.

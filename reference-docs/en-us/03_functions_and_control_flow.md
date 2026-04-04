@@ -1,0 +1,141 @@
+# 03. Functions and Control Flow
+
+Functions are the center of Dash programs. The current implementation supports global functions, local functions, variadics, return checking, direct ABI declarations through `extern`, and several loop/control constructs that are lowered into simpler forms in the semantic layer.
+
+## Global functions
+
+```dash
+fn add(a: int, b: int): int {
+    return a + b;
+}
+
+fn main(): int {
+    return add(10, 20);
+}
+```
+
+```dash
+export fn public_sum(a: int, b: int): int {
+    return a + b;
+}
+
+private fn internal_mul(a: int, b: int): int {
+    return a * b;
+}
+```
+
+Global functions can be annotated. `@entry` can replace `main` as the executable entry point, but only on a non-template global function. If `@entry` or `main` omits an explicit return type, the parser defaults the return type to `int`.
+
+## Local functions and capture behavior
+
+```dash
+fn main(): int {
+    let base: int = 10;
+
+    add_local(x: int): int {
+        return base + x;
+    }
+
+    io.println(add_local(32));
+    return 0;
+}
+```
+
+Local functions are parsed only inside function bodies. The semantic analyzer lowers them and tracks captured variables. This is one of the most important quality-of-life features in the current compiler because it lets you structure helper logic without polluting the global namespace.
+
+## Variadics
+
+```dash
+fn print_all(prefix: string, ...(args: ?)): void {
+    io.println(prefix, ": ", (args));
+}
+
+fn forward(prefix: string, ...(args: ?)): void {
+    print_all(prefix, (args));
+}
+```
+
+```dash
+fn inspect(...(args: ?)): void {
+    if (is<int, args[0]>) {
+        io.println("first variadic slot is int");
+    }
+
+    if (is<string, args[*]>) {
+        io.println("all slots are string");
+    }
+}
+```
+
+Variadics are richer than a plain C-style ellipsis in the current implementation. You can declare plain variadics with `...`, typed variadics, unknown-any variadics with `?`, forward them as `(args)` or `args...`, count them with `(args)`, and perform `is<T, args[i]>` style checks. This is powerful enough to deserve its own section in the reference chapter.
+
+## Loops
+
+```dash
+for (i : 10) {
+    io.println(i);
+}
+
+for (i : 5..10) {
+    io.println(i);
+}
+```
+
+```dash
+let i: int = 0;
+while (i < 10) {
+    i++;
+}
+
+do {
+    i--;
+} while (i > 0);
+```
+
+```dash
+for (let i: int = 0; i < 10; i++) {
+    io.println(i);
+}
+```
+
+The parser recognizes both classic C-like `for` loops and the compact range form `for (i : bound)` / `for (i : start..end)`. Internally the compact form is lowered to a classic for-loop with a generated temporary when the upper bound is complex. This means the compact syntax is expressive without hiding runtime cost rules.
+
+## match and switch
+
+```dash
+match (value) {
+    0..10 -> io.println("small"),
+    11 -> io.println("eleven"),
+    _ -> io.println("other")
+}
+```
+
+```dash
+switch (value) {
+    case 1:
+        io.println("one");
+        break;
+    case 2:
+        io.println("two");
+        break;
+    default:
+        io.println("other");
+        break;
+}
+```
+
+`switch` is lowered into chained comparisons. `match` is also lowered, but it supports ranges and a wildcard arm `_`. The current implementation uses a hidden boolean completion flag so only the first matching arm executes.
+
+## Returns and StrictReturn
+
+```dash
+@StrictReturn
+fn must_return(x: int): int {
+    if (x > 0) {
+        return x;
+    }
+    return 0;
+}
+```
+
+The semantic analyzer warns when control reaches the end of a non-void function without a return. `@StrictReturn` upgrades that to a hard diagnostic even without `-Werror`. This fits your own design direction of using annotations to push correctness into the editor and compiler pipeline rather than hiding behavior behind runtime sugar.

@@ -1,0 +1,266 @@
+09. Complete Reference
+
+This chapter is dense by design. It is the fastest place to check current syntax without reading the narrative chapters first.
+
+Top-level declarations
+
+- fn
+- export fn
+- private fn
+- let
+- const
+- export let
+- export const
+- extern
+- private extern
+- class
+- group
+- enum
+- type
+- struct
+- namespace "name" { ... }
+
+Function-level statements
+
+- let
+- const
+- return
+- break
+- continue
+- if
+- while
+- for
+- do-while
+- switch
+- match
+- block
+- local function
+
+Expressions
+
+- literals
+- string interpolation
+- calls
+- method calls
+- member access
+- indexing
+- casts
+- unary ops
+- binary ops
+- ternary ?:
+- constructor-like declaration init
+- aggregate member init via this.member{value} in returns
+
+Operators
+
+- + - * / % ^
+- < <= > >= == !=
+- && || !
+- & |
+- << >>
+- = += -= ++ --
+
+Types
+
+- builtin scalars
+- pointer *
+- array T[] / T[n]
+- map @map<K, V>
+- generic Type<T>
+- type query #type(...)
+- struct-ref property ->struct
+
+Annotations
+
+- @Deprecated
+- @Risky
+- @Warning
+- @Safe
+- @StrictReturn
+- @Todo
+- @Review
+- @Audit
+- @Notice
+- @Trace
+- @Experimental
+- @Unsafe
+- @Index
+- @inline
+- @entry
+- @link
+
+Example gallery
+
+
+Imports
+
+
+@import("std/io")
+@from("std/os") {system}
+
+fn main(): int {
+    io.println("Modules loaded");
+    return 0;
+}
+
+
+Variables
+
+
+let a: int = 10;
+const b: int = 20;
+let inferred := a + b;
+let text: string = $"sum = {inferred}";
+
+
+Pointers
+
+
+let value: int = 42;
+let ptr: int* = &value;
+*ptr = 100;
+io.println(value);
+
+
+Range for
+
+
+for (i : 10) {
+    io.println(i);
+}
+
+for (i : 5..10) {
+    io.println(i);
+}
+
+
+Class
+
+
+class Counter {
+    let value: int->0;
+
+    fn inc(): void {
+        self.value = self.value + 1;
+    }
+
+    fn get(): int {
+        return self.value;
+    }
+}
+
+
+Struct
+
+
+@Index[buffer]
+struct Buffer<T> {
+    let buffer: T[];
+
+    static new(): void {
+        this.buffer = {};
+    }
+
+    set(item: T, idx: int): void {
+        this.buffer[idx] = item;
+    }
+}
+
+
+FFI
+
+
+extern("c") puts(text: string): int;
+extern("c"): int errno;
+
+fn main(): int {
+    puts("ffi works");
+    return 0;
+}
+
+
+Annotations
+
+
+@Deprecated
+fn old_api(): void {}
+
+@Warning("api-warning", "experimental CLI entry")
+fn risky_cli(): void {}
+
+@entry
+fn start(): int {
+    risky_cli();
+    return 0;
+}
+
+
+Variadics
+
+
+fn print_all(prefix: string, ...(args: ?)): void {
+    io.println(prefix, ": ", (args));
+}
+
+fn forward(prefix: string, ...(args: ?)): void {
+    print_all(prefix, (args));
+}
+
+
+Local functions
+
+
+fn main(): int {
+    let base: int = 10;
+
+    add_local(x: int): int {
+        return base + x;
+    }
+
+    io.println(add_local(32));
+    return 0;
+}
+
+
+Vector benchmark
+
+
+@import("std/vector")
+@import("std/io")
+
+fn main(): int {
+    const N: int = 10000000;
+
+    let arr: Vec<int>::new();
+    arr.reserve(N);
+
+    for (i : N) {
+        arr.push(i);
+    }
+
+    let sum: uint = 0;
+    for (i : N) {
+        sum += arr[i];
+    }
+    
+    io.print(sum,'\n');
+    return 0;
+}
+
+
+Implementation-status notes
+
+- The old uploaded manual is useful as a historical baseline, but it is not fully synchronized with the current compiler tree. This new package was written by reading the uploaded src/, include/, the old DASH_en.md, and your Vec<T> implementation.
+- @import("...") and @from("...") { ... } are real source-loader directives, not parser sugar only. The loader also supports using namespace::path;.
+- struct is now the generic logical type system. Generic type aliases are rejected. type is only for non-generic aliases.
+- class methods use fn. struct methods use logical member syntax without fn. Static struct methods are written with static.
+- @entry, @inline, and @link("...") are restricted to global functions.
+- @Index[field] is implemented on struct and delegates obj[index] and obj[index] = value to the chosen field when that field is an array, pointer, or map.
+- for (i : N) and for (i : a..b) are real syntax and are lowered to classic for-loops.
+- Declaration initializers support constructor-like forms such as let v: Vec<int>::new(); and let p: Point(1, 2);.
+- @map<K, V> is implemented, including map literals using {[key: value], ...} and indexed reads/writes.
+- The compiler still implements array-style builtin collection operations such as ::push, ::insert, ::set, ::rem, and ::pop. However, the user-facing standard library direction clearly favors Vec<T> for dynamic growth, so this documentation treats Vec<T> as the primary dynamic sequence API and marks builtin collection helpers as low-level/legacy-facing behavior.
+- The analyzer binds both self and this to methods, so both names are currently usable inside instance methods. In practice, the style split that matches your own examples is: self for classes and this for structs.
+- Variadics are implemented, including variadic parameters, variadic forwarding using (args) or args..., variadic counting through (args), indexed access in semantic lowering, and is<T, args[i]> / is<T, args[*]> style checks.
+- Compiler-reserved lowered types use @![type]. User annotations also use @, so the docs keep a hard separation between user annotations and compiler-only lowered type notation.
+- The current CLI supports -I, -W<name>, -Werror, -O for stripping @Safe, -L=<profile>, -cl, -ld, -l, -d, and -sl. The help text currently advertises only gtk4 as a built-in link profile.

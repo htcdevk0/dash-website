@@ -1,0 +1,149 @@
+# 04. User-Defined Types
+
+Dash exposes multiple user-defined type forms because they serve different semantic roles. Classes are instance-oriented objects with `fn` methods. Structs are logical types that also serve as the generic type system. Groups are lightweight field-only aggregates. Enums standardize symbolic constants. Type aliases give renamed views over existing types. Namespaces give structured organization.
+
+## class
+
+```dash
+class Counter {
+    let value: int->0;
+
+    fn inc(): void {
+        self.value = self.value + 1;
+    }
+
+    fn get(): int {
+        return self.value;
+    }
+}
+```
+
+```dash
+class Math: static {
+    fn add(a: int, b: int): int {
+        return a + b;
+    }
+}
+
+fn main(): int {
+    return Math.add(10, 20);
+}
+```
+
+Classes optionally accept `: static` after the class name. Class fields use `let`/`const` and field initialization uses `-> initializer`, not `=` inside the declaration list. Class methods always use `fn`. Extern fields/methods are also supported inside classes.
+
+## struct<T>
+
+```dash
+@Index[buffer]
+struct Buffer<T> {
+    let buffer: T[];
+
+    static new(): void {
+        this.buffer = {};
+    }
+
+    set(item: T, idx: int): void {
+        this.buffer[idx] = item;
+    }
+}
+```
+
+```dash
+struct Pair<T> {
+    let left: T;
+    let right: T;
+
+    static new(a: T, b: T): void {
+        this.left = a;
+        this.right = b;
+    }
+
+    swap(): void {
+        let tmp: T = this.left;
+        this.left = this.right;
+        this.right = tmp;
+    }
+}
+```
+
+Generic logical types live on `struct`, not on `type`. This is one of the biggest synchronization points with the current parser. Struct instance methods are written in logical member syntax without `fn`. Static methods are written with `static`. The implementation also allows annotations on structs, including `@Index[field]` and warning-style metadata annotations.
+
+## group
+
+```dash
+group Vec3 {
+    x: float,
+    y: float,
+    z: float
+}
+
+fn main(): int {
+    let p: Vec3 = {1.0, 2.0, 3.0};
+    io.println(p.x);
+    return 0;
+}
+```
+
+```dash
+group Color {
+    r: int,
+    g: int,
+    b: int,
+    a: int
+}
+```
+
+Groups are field-only aggregates, close to a `typedef struct` feel. They are good for POD-like data, math vectors, color records, and ABI-friendly aggregate values. They do not carry methods.
+
+## enum
+
+```dash
+enum Mode {
+    Read = 1,
+    Write = 2,
+    Append = 3
+}
+```
+
+```dash
+enum TokenKind {
+    Identifier,
+    IntegerLiteral,
+    StringLiteral
+}
+```
+
+Enums support explicit integer values and auto-increment from the previous item. They are a clean way to encode protocol constants, modes, token kinds, and machine states.
+
+## type aliases
+
+```dash
+type FileHandle: int;
+type CString: char*;
+type NameTable: @map<string, string>;
+```
+
+`type` creates a non-generic alias. The parser explicitly rejects generic `type Name<T> ...` and tells you to use `struct` instead.
+
+## namespaces
+
+```dash
+namespace "gfx" {
+    namespace "color" {
+        fn white(): int {
+            return 0xffffff;
+        }
+    }
+}
+```
+
+```dash
+using gfx::color;
+
+fn main(): int {
+    return gfx::color::white();
+}
+```
+
+Namespaces are parsed as declaration scopes and qualified with `::`. The loader-level `using` directive can bring namespace paths into easier reach for analysis and editor tooling.

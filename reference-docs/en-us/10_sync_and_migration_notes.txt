@@ -1,0 +1,35 @@
+10. Sync and Migration Notes
+
+This chapter exists because the uploaded old manual and the current compiler do not describe exactly the same language surface. Instead of hiding that, this package makes the drift explicit and then tells you which form wins today.
+
+High-confidence synchronization points
+
+1. The old uploaded manual is useful as a historical baseline, but it is not fully synchronized with the current compiler tree. This new package was written by reading the uploaded src/, include/, the old DASH_en.md, and your Vec<T> implementation.
+2. @import("...") and @from("...") { ... } are real source-loader directives, not parser sugar only. The loader also supports using namespace::path;.
+3. struct is now the generic logical type system. Generic type aliases are rejected. type is only for non-generic aliases.
+4. class methods use fn. struct methods use logical member syntax without fn. Static struct methods are written with static.
+5. @entry, @inline, and @link("...") are restricted to global functions.
+6. @Index[field] is implemented on struct and delegates obj[index] and obj[index] = value to the chosen field when that field is an array, pointer, or map.
+7. for (i : N) and for (i : a..b) are real syntax and are lowered to classic for-loops.
+8. Declaration initializers support constructor-like forms such as let v: Vec<int>::new(); and let p: Point(1, 2);.
+9. @map<K, V> is implemented, including map literals using {[key: value], ...} and indexed reads/writes.
+10. The compiler still implements array-style builtin collection operations such as ::push, ::insert, ::set, ::rem, and ::pop. However, the user-facing standard library direction clearly favors Vec<T> for dynamic growth, so this documentation treats Vec<T> as the primary dynamic sequence API and marks builtin collection helpers as low-level/legacy-facing behavior.
+11. The analyzer binds both self and this to methods, so both names are currently usable inside instance methods. In practice, the style split that matches your own examples is: self for classes and this for structs.
+12. Variadics are implemented, including variadic parameters, variadic forwarding using (args) or args..., variadic counting through (args), indexed access in semantic lowering, and is<T, args[i]> / is<T, args[*]> style checks.
+13. Compiler-reserved lowered types use @![type]. User annotations also use @, so the docs keep a hard separation between user annotations and compiler-only lowered type notation.
+14. The current CLI supports -I, -W<name>, -Werror, -O for stripping @Safe, -L=<profile>, -cl, -ld, -l, -d, and -sl. The help text currently advertises only gtk4 as a built-in link profile.
+
+Migration checklist
+
+- Prefer @import / @from over older bracketed import syntax in all new examples.
+- Use struct<T> for generic logical user types; do not write generic type aliases.
+- Keep class methods on fn, keep struct methods on logical member syntax.
+- Treat Vec<T> as the standard dynamic sequence in tutorials, samples, and performance-sensitive docs.
+- Reserve array builtin mutation helpers for advanced/legacy sections unless you explicitly want to expose them.
+- Document @Index[...] whenever you document Vec<T> or any custom indexed container.
+- Document @Safe together with the CLI -O switch, because the annotation participates in optimization behavior.
+- Document variadics as a real feature, not as unfinished syntax.
+
+Final editorial position
+
+When the old manual and the current compiler disagree, this package follows the current compiler, the current LSP, and the vector design direction you explicitly confirmed in conversation. That is why some sections read more modern than the old LTS text.
