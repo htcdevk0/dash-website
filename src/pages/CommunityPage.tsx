@@ -1,5 +1,6 @@
 import { PageHero } from '../components/PageHero'
 import { SectionHeading } from '../components/SectionHeading'
+import StartSection from '../components/StartSection'
 
 export function CommunityPage() {
   return (
@@ -39,6 +40,8 @@ export function CommunityPage() {
           </p>
         </div>
       </section>
+
+      <StartSection />
     </>
   )
 }

@@ -8,6 +8,8 @@ const navItems = [
   { to: '/governance', label: 'Governance' },
   { to: '/community', label: 'Community' },
   { to: '/download', label: 'Download' },
+  { to: '/about', label: 'About'},
+  { to: './project', label: 'Project'}
 ]
 
 export function SiteLayout() {

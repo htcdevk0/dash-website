@@ -1,5 +1,6 @@
 import { PageHero } from '../components/PageHero'
 import { SectionHeading } from '../components/SectionHeading'
+import StartSection from '../components/StartSection'
 
 export function GovernancePage() {
   return (
@@ -43,6 +44,8 @@ export function GovernancePage() {
           </p>
         </div>
       </section>
+
+      <StartSection />
     </>
   )
 }

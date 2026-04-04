@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { PageHero } from '../components/PageHero'
 import { SectionHeading } from '../components/SectionHeading'
+import StartSection from '../components/StartSection'
 
 const toolCards = [
   ['Source loading', 'The loader scans files, strips directives, resolves imports, tracks namespace shortcuts, prevents cycles, and hands normalized source to the parser.'],
@@ -106,6 +107,8 @@ dash build main.ds support.o -cl libextra.a -ld/usr/lib -lm`}</pre>
           </div>
         </div>
       </section>
+
+      <StartSection />
     </>
   )
 }

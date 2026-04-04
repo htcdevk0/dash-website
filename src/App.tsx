@@ -9,6 +9,8 @@ import { CommunityPage } from './pages/CommunityPage'
 import { DownloadPage } from './pages/DownloadPage'
 import { VoidPage } from './pages/VoidPage'
 import { NotFoundPage } from './pages/NotFoundPage'
+import { AboutPage } from './pages/AboutPage'
+import { ProjectPage } from './pages/ProjectPage'
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
         <Route path="/governance" element={<GovernancePage />} />
         <Route path="/community" element={<CommunityPage />} />
         <Route path="/download" element={<DownloadPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path='/project' element={<ProjectPage />} />
         <Route path="*" element={<NotFoundPage/>} />
       </Route>
     </Routes>
