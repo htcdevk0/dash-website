@@ -22,6 +22,7 @@ export function EndLearnPage() {
                   lineHeight: 1,
                   marginBottom: '1.25rem',
                 }}
+                className='__sad_face'
               >
                 :(
               </div>
