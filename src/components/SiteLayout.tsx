@@ -1,4 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { ScrollToTop } from './utils'
+import { useEffect, useState } from 'react'
+import { GotoButton } from './GotoButton'
 
 const navItems = [
   { to: '/', label: 'Home'},
@@ -15,7 +18,9 @@ const navItems = [
 export function SiteLayout() {
   return (
     <div className="site-shell">
-      <header className="site-header">
+      <ScrollToTop />
+      <GotoButton />
+      <header className={`site-header`}>
         <div className="site-header__inner container-wide">
           <NavLink to="/" className="brand" aria-label="Dash home">
             <img src="/logo-comb.svg" alt="Dash" className="brand__logo brand__logo--light" />

@@ -1,3 +1,4 @@
+import { LearnSection } from '../components/LearnSection'
 import { PageHero } from '../components/PageHero'
 import { SectionHeading } from '../components/SectionHeading'
 import { Link } from 'react-router-dom'
@@ -124,6 +125,17 @@ for (i : N) {
         </div>
       </section>
 
+      <LearnSection />
+	  
+	  <section className="band band--paper">
+		<div className="container one-column-layout">
+			<SectionHeading title="Examples" accent="gold"/>
+			<p>
+				Small, focused snippets for quick reference when working with Dash.
+			</p>
+			<Link className="button button--secondary" to={`/examples`}>Open examples</Link>
+		</div>
+	  </section>
 
       <StartSection />
     </>

@@ -52,9 +52,7 @@ export function HomePage() {
         title="Dash"
         summary={
           <p>
-            A systems language focused on explicit control, LLVM-based compilation,
-            direct linking, FFI, practical editor tooling, and a syntax surface that stays lighter
-            than C++ without moving away from low-level work.
+            A systems programming language built for explicit control, performance, and direct integration, powered by LLVM, FFI, and a clean syntax that stays close to the machine.
           </p>
         }
         actions={

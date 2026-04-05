@@ -38,12 +38,16 @@ code, pre { font-family: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Reg
 .container { width: min(1060px, calc(100% - 48px)); }
 
 .site-header {
-  position: sticky;
+  position: relative;
   top: 0;
+  left: 0;
+  width: 100%;
   z-index: 100;
-  background: rgba(242, 240, 234, 0.96);
+
+  background: var(--paper);
   border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(6px);
+
+  transition: transform 0.35s ease;
 }
 .site-header__inner {
   display: flex;
@@ -53,7 +57,7 @@ code, pre { font-family: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Reg
   min-height: 82px;
 }
 .brand { display: inline-flex; align-items: center; }
-.brand__logo { width: 152px; height: auto; }
+.brand__logo { width: 170px; height: auto; }
 .brand__logo--dark { display: none; }
 .site-nav { display: flex; flex-wrap: wrap; gap: 18px; }
 .site-nav__link {
@@ -252,7 +256,301 @@ pre {
 .footer-meta sup {
   font-size: 0.6em;
   vertical-align: super;
-} 
+}
+
+.code-card {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9rem;
+
+  padding: 1rem;
+  border-radius: 6px;
+
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.35);
+
+  overflow-x: auto;
+}
+
+.code-card__pre {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.code-card__line {
+  white-space: pre;
+}
+
+.code-token--keyword {
+  color: #d4bfff;
+}
+
+.code-token--directive {
+  color: #ffcb6b;
+}
+
+.code-token--type {
+  color: #ffd580;
+}
+
+.code-token--string {
+  color: #a5d6a7;
+}
+
+.code-token--number {
+  color: #90caf9;
+}
+
+.keyword {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9em;
+
+  padding: 2px 6px;
+  border-radius: 4px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.run-area-wrapper {
+  margin-top: 1rem;
+}
+
+.run-area {
+  margin-top: 1rem;
+
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9rem;
+
+  padding: 1rem;
+  border-radius: 6px;
+
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.4);
+}
+
+.run-area__line {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.run-area__prompt {
+  color: #a5d6a7;
+}
+
+.run-area__command {
+  color: #e0e0e0;
+}
+
+.run-area__output pre {
+  margin: 0;
+  white-space: pre-wrap;
+  color: #cccccc;
+}
+
+.code-card {
+  position: relative;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9rem;
+  padding: 1rem;
+  padding-top: 3rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.35);
+  overflow-x: auto;
+}
+
+.code-card__copy {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.75);
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.code-card__copy:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.95);
+}
+
+.code-card__copy:active {
+  background: rgba(255,255,255,0.12);
+}
+
+.code-card__copy svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.code-card__pre {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.code-card__line {
+  white-space: pre;
+}
+
+.fast-command {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.85rem;
+
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.35);
+}
+
+.fast-command__text {
+  color: #e0e0e0;
+}
+
+.fast-command__copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+
+  width: 1.8rem;
+  height: 1.8rem;
+
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.75);
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.fast-command__copy:hover {
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.95);
+}
+
+.fast-command__copy:active {
+  background: rgba(255,255,255,0.12);
+}
+
+.learn-nav {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.popup-window__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 1.5rem;
+
+  background: rgba(5, 5, 5, 0.75);
+}
+
+.popup-window {
+  width: min(42rem, 100%);
+  max-height: 85vh;
+  overflow: auto;
+
+  border-radius: 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  background: #1c1e24;
+
+  padding: 1.25rem;
+}
+
+.popup-window__content {
+  min-height: 8rem;
+}
+
+.popup-window__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+.__download_button {
+  cursor: pointer;
+}
+
+.__pop_up_window_button {
+  cursor: pointer;
+}
+
+.goto-button {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 60;
+
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(235, 191, 54, 0.16);
+  border-radius: 0;
+  background: rgba(22, 17, 15, 0.96);
+  color: rgba(255, 248, 236, 0.88);
+
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+}
+
+.goto-button:hover {
+  background: rgba(34, 27, 24, 0.98);
+  border-color: rgba(235, 191, 54, 0.28);
+  color: #fff6dd;
+}
+
+.goto-button__icon {
+  display: block;
+  transition: transform 0.10s ease;
+}
+
+.goto-button__icon--up {
+  transform: rotate(-90deg);
+}
+
+.goto-button__icon--down {
+  transform: rotate(90deg);
+}
+
+@media (max-width: 700px) {
+  .goto-button {
+    right: 1rem;
+    bottom: 1rem;
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
 
 @media (max-width: 980px) {
   .page-hero__grid,
@@ -272,7 +570,10 @@ pre {
 
 @media (prefers-color-scheme: dark) {
   body { background: #161311; color: #f2eadf; }
-  .site-header { background: rgba(22, 19, 17, 0.96); border-bottom-color: #4a4035; }
+  .site-header {
+    background: #161311;
+    border-bottom-color: #3a3228;
+  }
   .site-nav__link { color: #e6dccd; }
   .page-hero,
   .band--paper { background: #1b1714; color: #f2eadf; }
@@ -280,3 +581,4 @@ pre {
   .brand__logo--light { display: none; }
   .brand__logo--dark { display: block; }
 }
+

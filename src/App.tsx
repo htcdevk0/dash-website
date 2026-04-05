@@ -11,6 +11,14 @@ import { VoidPage } from './pages/VoidPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { AboutPage } from './pages/AboutPage'
 import { ProjectPage } from './pages/ProjectPage'
+import { GetStarted } from './pages/learn/GetStarted'
+import { Variables } from './pages/learn/Variables'
+import { Memory } from './pages/learn/Memory'
+import { Vector } from './pages/learn/Vector'
+import { ExamplesPage } from './pages/ExamplesPage'
+import { Functions } from './pages/learn/Functions'
+import { Classes } from './pages/learn/Classes'
+import { EndLearnPage } from './pages/EndLearnPage'
 
 function App() {
   return (
@@ -26,6 +34,17 @@ function App() {
         <Route path="/download" element={<DownloadPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path='/project' element={<ProjectPage />} />
+        <Route path='/examples' element={<ExamplesPage />} />
+        {/* LEARN SECTION */}
+        <Route path='/learn/get-started' element={<GetStarted />} />
+        <Route path='/learn/variables' element={<Variables />} />
+        <Route path='/learn/memory' element={<Memory />} />
+        <Route path='/learn/vector' element={<Vector />} />
+        <Route path='/learn/functions' element={<Functions />} />
+        <Route path='/learn/classes' element={<Classes />} />
+
+        <Route path='/learn/end' element={<EndLearnPage />} />
+        {/* END LEARN SECTION */}
         <Route path="*" element={<NotFoundPage/>} />
       </Route>
     </Routes>

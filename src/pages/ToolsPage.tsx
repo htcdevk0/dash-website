@@ -90,20 +90,20 @@ void run`}</pre>
         <div className="container two-column-layout">
           <div>
             <SectionHeading title="Build commands" accent="gold" />
-            <pre>{`dash main.ds
-dash build main.ds
-dash run main.ds
+            <pre>{`dashc main.ds -o main
+dashc build main.ds
+dashc run main.ds
 
-dash build app.ds --emit-llvm -o app.ll
-dash build lib.ds --shared -o libdemo.so
-dash build tool.ds -Wapi-warning -Werror`}</pre>
+dashc build app.ds --emit-llvm -o app.ll
+dashc build lib.ds --shared -o libdemo.so
+dashc build tool.ds -Wapi-warning -Werror`}</pre>
           </div>
           <div>
             <SectionHeading title="Linking commands" accent="gold" />
-            <pre>{`dash build main.ds -sl
-dash build main.ds -d
-dash build main.ds -L=gtk4
-dash build main.ds support.o -cl libextra.a -ld/usr/lib -lm`}</pre>
+            <pre>{`dashc build main.ds -sl
+dashc build main.ds -d
+dashc build main.ds -L=gtk4
+dashc build main.ds support.o -cl libextra.a`}</pre>
           </div>
         </div>
       </section>
