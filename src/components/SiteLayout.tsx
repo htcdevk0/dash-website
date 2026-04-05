@@ -75,10 +75,10 @@ export function SiteLayout() {
           <div>
             <h4>Repositories</h4>
             <ul>
-              <li><NavLink to="https://github.com/htcdevk0/dash" target='_blank'>Dash Language Repository</NavLink></li>
-              <li><NavLink to="https://github.com/htcdevk0/dash-void" target='_blank'>Void Build Tool Repository</NavLink></li>
-              <li><NavLink to="https://github.com/htcdevk0/dashtup" target='_blank'>Dashtup Repository</NavLink></li>
-              <li><NavLink to="https://github.com/htcdevk0/dash-stdlib" target='_blank'>Dash Language StdLib Repository</NavLink></li>
+              <li><NavLink to="https://github.com/dashlng/dash" target='_blank'>Dash Language Repository</NavLink></li>
+              <li><NavLink to="https://github.com/dashlng/dash-void" target='_blank'>Void Build Tool Repository</NavLink></li>
+              <li><NavLink to="https://github.com/dashlng/dashtup" target='_blank'>Dashtup Repository</NavLink></li>
+              <li><NavLink to="https://github.com/dashlng/dash-stdlib" target='_blank'>Dash Language StdLib Repository</NavLink></li>
             </ul>
           </div>
         </div>

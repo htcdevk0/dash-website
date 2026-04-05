@@ -27,7 +27,7 @@ export function DownloadPage() {
         <div className="container two-column-layout">
           <div>
             <SectionHeading title="Primary installation route" accent="gold" />
-            <pre>{`git clone https://github.com/dash-lang/dashtup.git
+            <pre>{`git clone https://github.com/dashlng/dashtup.git
 cd dashtup
 ./dashtup install`}</pre>
           </div>
