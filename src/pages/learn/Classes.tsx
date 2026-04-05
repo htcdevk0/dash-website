@@ -2,7 +2,6 @@ import { PageHero } from '../../components/PageHero'
 import { SectionHeading } from '../../components/SectionHeading'
 import { CodeCard } from '../../components/CodeCard'
 import { Keyword } from '../../components/Keyword'
-import { LearnNext } from '../../components/LearnNext'
 import { LearnNav } from '../../components/LearnNav'
 
 export function Classes() {

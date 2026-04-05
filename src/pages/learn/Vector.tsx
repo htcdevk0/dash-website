@@ -3,7 +3,6 @@ import { SectionHeading } from '../../components/SectionHeading'
 import { CodeCard } from '../../components/CodeCard'
 import { Keyword } from '../../components/Keyword'
 import { RunArea } from '../../components/RunArea'
-import { LearnNext } from '../../components/LearnNext'
 import { LearnNav } from '../../components/LearnNav'
 
 export function Vector() {

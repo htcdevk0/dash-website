@@ -1,6 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { ScrollToTop } from './utils'
-import { useEffect, useState } from 'react'
 import { GotoButton } from './GotoButton'
 
 const navItems = [
